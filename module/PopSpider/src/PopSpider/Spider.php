@@ -79,10 +79,7 @@ class Spider
         'h5'     => array(),
         'h6'     => array(),
         'strong' => array(),
-        'em'     => array(),
-        'b'      => array(),
-        'u'      => array(),
-        'i'      => array()
+        'em'     => array()
     );
 
     /**
@@ -383,33 +380,6 @@ class Spider
         if (null !== $em->item(0)) {
             foreach ($em as $e) {
                 $this->elements['em'][] = $e->nodeValue;
-            }
-        }
-
-        // Get B tags
-        $bold = $this->dom->getElementsByTagName('b');
-
-        if (null !== $bold->item(0)) {
-            foreach ($bold as $b) {
-                $this->elements['b'][] = $b->nodeValue;
-            }
-        }
-
-        // Get U tags
-        $underline = $this->dom->getElementsByTagName('u');
-
-        if (null !== $underline->item(0)) {
-            foreach ($underline as $u) {
-                $this->elements['u'][] = $u->nodeValue;
-            }
-        }
-
-        // Get I tags
-        $italic = $this->dom->getElementsByTagName('i');
-
-        if (null !== $italic->item(0)) {
-            foreach ($italic as $i) {
-                $this->elements['i'][] = $i->nodeValue;
             }
         }
 

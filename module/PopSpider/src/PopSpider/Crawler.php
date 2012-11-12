@@ -35,12 +35,14 @@ class Crawler
      * Static method to crawl the URLs
      *
      * @param  string $url
+     * @param  array  $elements
+     * @param  string $parent
      * @return void
      */
-    public static function crawl($url, $parent = null)
+    public static function crawl($url, $elements = null, $parent = null)
     {
         if (!array_key_exists($url, self::$urls)) {
-            $spider = new Spider($url);
+            $spider = new Spider($url, $elements);
             if ($spider->isError()) {
                 self::$errors[] = array(
                     'url'    => $url,
@@ -57,12 +59,24 @@ class Crawler
                 if (null !== $urls) {
                     foreach ($urls as $u) {
                         if ((null !== $u['href']) && ($u['href'] != '') && ($u['href'] != '#') && (stripos($u['href'], $domain) !== false)) {
-                            self::crawl($u['href'], $url);
+                            self::crawl($u['href'], $elements, $url);
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Static method to output the results
+     *
+     * @param  string $format
+     * @param  string $dir
+     * @return void
+     */
+    public static function output($format, $dir)
+    {
+
     }
 
     /**

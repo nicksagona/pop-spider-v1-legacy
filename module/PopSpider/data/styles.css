@@ -1,0 +1,58 @@
+/*
+ * PopSpider styles
+ */
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-size: 0.825em;
+    color: #000;
+}
+
+img {
+    border: none;
+}
+
+a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #006cff;
+}
+
+a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    color: #758193;
+}
+
+h1 {
+    margin: 0 0 20px 0;
+    padding: 0;
+    font-size: 3.0em;
+    font-weight: normal;
+}
+
+h2 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 2.4em;
+    font-weight: normal;
+}
+
+h3 {
+    margin: 0 0 12px 0;
+    padding: 0;
+    font-size: 1.8em;
+}
+
+p {
+    margin: 0 0 15px 0;
+    padding: 0;
+    line-height: 1.5em;
+}
