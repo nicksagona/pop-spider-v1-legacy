@@ -6,7 +6,7 @@
 namespace PopSpider;
 
 /**
- * This is the Spider class for the PopSpider.
+ * This is the Crawler class for the PopSpider.
  *
  * @category   PopSpider
  * @package    PopSpider
