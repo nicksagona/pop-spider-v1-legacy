@@ -5,6 +5,21 @@ A simple web spider that parses SEO-pertinent data from a website.
 Simply download this Pop module, hook it up to a local copy of the
 Pop PHP Framework and it'll be ready to crawl any site.
 
+By default, the spider parses the following elements and their
+SEO-pertinent attributes:
+* title
+* meta
+* a
+* img
+* h1
+* h2
+* h3
+* h4
+* h5
+* h6
+* strong
+* em
+
 Options:
 --------
 * -u --url http://www.domain.com/
