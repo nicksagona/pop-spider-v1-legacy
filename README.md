@@ -20,6 +20,8 @@ SEO-pertinent attributes:
 * strong
 * em
 
+You can parse additional elements via the --elements option.
+
 Options:
 --------
 * -u --url http://www.domain.com/
