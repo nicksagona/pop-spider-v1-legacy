@@ -340,10 +340,10 @@ class Spider
 
                 $this->elements['a'][] = array(
                     'href'  => $href,
+                    'value' => $value,
                     'title' => ($a->hasAttribute('title') ? $a->getAttribute('title') : null),
                     'name'  => ($a->hasAttribute('name') ? $a->getAttribute('name') : null),
-                    'rel'   => ($a->hasAttribute('rel') ? $a->getAttribute('rel') : null),
-                    'value' => $value
+                    'rel'   => ($a->hasAttribute('rel') ? $a->getAttribute('rel') : null)
                 );
             }
         }

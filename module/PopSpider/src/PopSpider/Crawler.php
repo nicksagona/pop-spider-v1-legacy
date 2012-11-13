@@ -51,8 +51,8 @@ class Crawler
             echo '-> (' . $spider->getCode() . ') ' . $url . PHP_EOL;
             if ($spider->isError()) {
                 self::$errors[] = array(
-                    'url'    => $url,
                     'code'   => $spider->getCode(),
+                    'url'    => $url,
                     'parent' => $parent
                 );
             } else {
@@ -82,6 +82,7 @@ class Crawler
      */
     public static function output($url, $dir)
     {
+        // Create the HTML file
         $view = View::factory(__DIR__ . '/../../view/index.phtml', new Model(array(
             'title'  => $url,
             'urls'   => self::$urls,
@@ -96,7 +97,6 @@ class Crawler
         $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
         $file->write($html)
              ->save();
-
     }
 
     /**
