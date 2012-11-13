@@ -353,8 +353,40 @@ class Spider
 
         if (null !== $imgs->item(0)) {
             foreach ($imgs as $img) {
+
+                if ($img->hasAttribute('src')) {
+                    $s = $img->getAttribute('src');
+                    if (substr($s, 0, 1) == '/') {
+                        $s = substr($s, 1);
+                        $base = str_replace($this->schema, '', $base);
+                        if (strpos($base, '/') !== false) {
+                            $base = substr($base, 0, strpos($base, '/'));
+                        }
+                        $src = $this->schema . $base . '/' . $s;
+                    } else if (substr($s, 0, 2) == './') {
+                        $s = substr($s, 2);
+                        $src = $base . $s;
+                    } else if (strpos($s, '../') !== false) {
+                        $num = substr_count($s, '../');
+                        $base = substr($base, 0, -1);
+                        $base = str_replace($this->schema, '', $base);
+                        if (strpos($base, '/') !== false) {
+                            for ($i = 0; $i < $num; $i++) {
+                                $base = substr($base, 0, strrpos($base, '/'));
+                            }
+                        }
+                        $base = $this->schema . $base . '/';
+                        $s = str_replace('../', '', $s);
+                        $src = $base . $s;
+                    } else {
+                        $src = $base . $s;
+                    }
+                } else {
+                    $src = null;
+                }
+
                 $this->elements['img'][] = array(
-                    'src'   => ($img->hasAttribute('src') ? $img->getAttribute('src') : null),
+                    'src'   => $src,
                     'alt'   => ($img->hasAttribute('alt') ? $img->getAttribute('alt') : null),
                     'title' => ($img->hasAttribute('title') ? $img->getAttribute('title') : null),
                 );

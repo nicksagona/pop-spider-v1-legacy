@@ -27,11 +27,13 @@ if (count($urls) > 0) {
     echo '    <table class="data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
     echo '        <tr><th style="width: 10%;">Code</th><th>Title / URL <span style="float: right; margin: 2px 0 0 0; font-weight: normal; font-size: 0.7em;">(Click title to expand)</span></th></tr>' . PHP_EOL;
     foreach ($urls as $key => $value) {
+        $tle = $value->getElements('title');
+        $urlTitle = ($tle != '') ? trim($tle) : '(No Page Title)';
         echo '        <tr>' . PHP_EOL;
         echo '            <td style="color: #fff; font-weight: bold; font-size: 1.6em; background-color: #699e34; text-align: center;">' . $value->getCode() . '</td>' . PHP_EOL;
         echo '            <td>' . PHP_EOL;
         echo '                <a class="right" style="margin: 7px 0 0 0;" href="' . $key . '" target="_blank">' . $key . '</a>' . PHP_EOL;
-        echo '                <h3><a href="#" onclick="displayResults(\'results-' . $j . '\'); return false;">' . trim($value->getElements('title')) .'</a></h3>' . PHP_EOL;
+        echo '                <h3><a href="#" onclick="displayResults(\'results-' . $j . '\'); return false;">' . $urlTitle .'</a></h3>' . PHP_EOL;
         echo '                <div id="results-' . $j . '" style="display: none;">' . PHP_EOL;
 
         // META Tags
@@ -132,7 +134,7 @@ if (count($urls) > 0) {
                 echo '                </table>' . PHP_EOL;
             }
         }
-        echo '            </div>' . PHP_EOL;
+        echo '                </div>' . PHP_EOL;
         echo '            </td>' . PHP_EOL;
         echo '        </tr>' . PHP_EOL;
         $j++;
