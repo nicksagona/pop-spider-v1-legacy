@@ -14,21 +14,21 @@
 #
 # Possible usage and arguments
 #
-# ./crawl http://www.domain.com/ -d ./myfolder -o csv -e b,u
+# ./crawl -u http://www.domain.com/ -d ./myfolder -o csv -e b,u
 #
-# -d --dir folder         Set the folder in which to output the file(s) (default: current)
-# -o --output html|csv    Set the output to either HTML or CSV (default: HTML)
-# -e --elements b,u       Set any additional elements to parse, comma-separated list
-# -h --help               Display this help
+# -u --url http://www.domain.com/    Set the URL in which to crawl
+# -d --dir folder                    Set the folder in which to output the file(s) (default: current)
+# -e --elements b,u                  Set any additional elements to parse, comma-separated list
+# -h --help                          Display this help
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CYG_PATH="$( which cygpath )"
 
 if [ "$CYG_PATH" != "" ]; then
-    SCRIPT_PATH="$( cygpath -w $SCRIPT_DIR )\\crawl.php $1 $2 $3 $4 $5 $6 $7 $8"
+    SCRIPT_PATH="$( cygpath -w $SCRIPT_DIR )\\crawl.php $1 $2 $3 $4 $5 $6"
     SCRIPT_PATH=${SCRIPT_PATH//\\/\/}
 else
-    SCRIPT_PATH="$SCRIPT_DIR/crawl.php $1 $2 $3 $4 $5 $6 $7 $8"
+    SCRIPT_PATH="$SCRIPT_DIR/crawl.php $1 $2 $3 $4 $5 $6"
 fi
 php $SCRIPT_PATH

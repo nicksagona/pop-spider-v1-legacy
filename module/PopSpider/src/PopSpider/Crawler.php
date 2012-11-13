@@ -77,26 +77,26 @@ class Crawler
      * Static method to output the results
      *
      * @param  string $url
-     * @param  string $output
      * @param  string $dir
      * @return void
      */
-    public static function output($url, $output, $dir)
+    public static function output($url, $dir)
     {
-        if ($output == 'csv') {
-            echo 'Do some CSV stuff';
-        } else {
-            $view = View::factory(__DIR__ . '/../../view/index.phtml', new Model(array(
-                'title'  => $url,
-                'urls'   => self::$urls,
-                'errors' => self::$errors
-            )));
-            $html = $view->render(true);
-            copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
-            $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
-            $file->write($html)
-                 ->save();
-        }
+        $view = View::factory(__DIR__ . '/../../view/index.phtml', new Model(array(
+            'title'  => $url,
+            'urls'   => self::$urls,
+            'errors' => self::$errors
+        )));
+
+        $html = $view->render(true);
+
+        copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
+        copy(__DIR__ . '/../../data/scripts.js', $dir . DIRECTORY_SEPARATOR . 'scripts.js');
+
+        $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
+        $file->write($html)
+             ->save();
+
     }
 
     /**

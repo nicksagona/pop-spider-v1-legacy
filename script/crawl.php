@@ -15,11 +15,10 @@
  *
  * Possible usage and arguments
  *
- * ./crawl http://www.domain.com/ -d ./myfolder -o csv -e b,u
+ * ./crawl -u http://www.domain.com/ -d ./myfolder  -e b,u
  *
  * -u --url http://www.domain.com/    Set the URL in which to crawl
- * -d --dir folder                    Set the folder in which to output the file(s) (default: current)
- * -o --output html|csv               Set the output to either HTML or CSV (default: HTML)
+ * -d --dir folder                    Set the folder in which to output the file(s)
  * -e --elements b,u                  Set any additional elements to parse, comma-separated list
  * -h --help                          Display this help
  *
@@ -36,9 +35,8 @@ require_once __DIR__ . '/../bootstrap.php';
 
 use PopSpider\Crawler;
 
-$options = getopt('u:d:o:e:h', array('url:', 'dir:', 'output:', 'elements:', 'help'));
+$options = getopt('u:d:e:h', array('url:', 'dir:', 'elements:', 'help'));
 $url = null;
-$output = 'html';
 $folder = __DIR__;
 $elements = null;
 
@@ -53,7 +51,6 @@ if (isset($options['h']) || isset($options['help'])) {
     echo '----' . PHP_EOL;
     echo ' -u --url http://www.domain.com/    Set the URL in which to crawl' . PHP_EOL;
     echo ' -d --dir folder                    Set the folder in which to output the file(s) (default: current)' . PHP_EOL;
-    echo ' -o --output html|csv               Set the output to either HTML or CSV (default: HTML)' . PHP_EOL;
     echo ' -e --elements b,u                  Set any additional elements to parse, comma-separated list' . PHP_EOL;
     echo ' -h --help                          Display this help' . PHP_EOL . PHP_EOL;
     exit(0);
@@ -76,22 +73,15 @@ if (substr($url, 0, 4) != 'http') {
 // Get the output directory
 if (isset($options['d']) || isset($options['dir'])) {
     $dir = (isset($options['d'])) ? $options['d'] : $options['dir'];
-    $dir = __DIR__ . DIRECTORY_SEPARATOR . $dir;
+    if ((substr($dir, 0, 1) != '/') && (substr($dir, 1, 1) != ':')) {
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . $dir;
+    }
     if (!file_exists($dir)) {
         mkdir($dir);
     }
     $folder = realpath($dir);
 }
 
-// Get the output format
-if (isset($options['o']) || isset($options['output'])) {
-    $output = (isset($options['o'])) ? $options['o'] : $options['output'];
-    $output = strtolower($output);
-    if (($output != 'html') && ($output != 'csv')) {
-        echo 'The output argument must only be either \'html\' or \'csv\'. ./crawl --help for help.' . PHP_EOL . PHP_EOL;
-        exit(0);
-    }
-}
 
 // Get the additional elements
 if (isset($options['e']) || isset($options['elements'])) {
@@ -102,5 +92,5 @@ if (isset($options['e']) || isset($options['elements'])) {
 echo 'Crawling: ' . $url . PHP_EOL;
 echo '----------' . str_repeat('-', strlen($url)) . PHP_EOL;
 Crawler::crawl($url, $elements);
-Crawler::output($url, $output, $folder);
+Crawler::output($url, $folder);
 echo PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;

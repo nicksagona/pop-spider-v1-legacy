@@ -230,6 +230,7 @@ class Spider
     /**
      * Get the element count by name
      *
+     * @param  string $name
      * @return int
      */
     public function count($name)
@@ -240,11 +241,16 @@ class Spider
     /**
      * Get the elements by name
      *
+     * @param  string $name
      * @return mixed
      */
-    public function getElements($name)
+    public function getElements($name = null)
     {
-        return (array_key_exists($name, $this->elements)) ? $this->elements[$name] : null;
+        if (null === $name) {
+            return $this->elements;
+        } else {
+            return (array_key_exists($name, $this->elements)) ? $this->elements[$name] : null;
+        }
     }
 
     /**
