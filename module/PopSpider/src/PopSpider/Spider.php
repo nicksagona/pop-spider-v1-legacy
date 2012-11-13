@@ -145,7 +145,7 @@ class Spider
                 $oldError = ini_get('error_reporting');
                 error_reporting(0);
 
-                $this->dom = new DOMDocument();
+                $this->dom = new \DOMDocument();
                 $this->dom->strictErrorChecking = false;
                 $this->dom->loadHTML($response->getBody());
 
