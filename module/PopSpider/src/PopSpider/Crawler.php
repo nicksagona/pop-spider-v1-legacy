@@ -89,13 +89,11 @@ class Crawler
             'errors' => self::$errors
         )));
 
-        $html = $view->render(true);
-
         copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
         copy(__DIR__ . '/../../data/scripts.js', $dir . DIRECTORY_SEPARATOR . 'scripts.js');
 
         $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
-        $file->write($html)
+        $file->write($view->render(true))
              ->save();
     }
 
