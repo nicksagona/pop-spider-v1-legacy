@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- Header //-->
+<html>
+
+<head>
+
+    <title>
+        PopSpider Results: <?php echo $title . PHP_EOL; ?>
+    </title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+
+<body>
+<!-- Content //-->
+<div id="content">
+    <h1>PopSpider Results: <?php echo $title; ?></h1>
+<?php
+echo '    <h2>' . count($urls) . ' URLs</h2>'. PHP_EOL;
+if (count($urls) > 0) {
+    foreach ($urls as $key => $value) {
+        echo '    <p>(' . $value->getCode() . ') ' . $key . '</p>' . PHP_EOL;
+    }
+} else {
+    echo '    <p>There were no URLs to crawl.</p>' . PHP_EOL;
+}
+
+echo '    <h2>' . count($errors) . ' Errors</h2>'. PHP_EOL;
+if (isset($errors[0])) {
+    foreach ($errors as $url => $value) {
+        echo '    <hr>' . PHP_EOL;
+        echo '[' . $value['code'] . '] ' . $value['url'] . ' (' . $value['parent'] .')' . PHP_EOL;
+    }
+} else {
+    echo '    <p>There were no errors.</p>' . PHP_EOL;
+}
+?>
+</div>
+<!-- Footer //-->
+</body>
+
+</html>

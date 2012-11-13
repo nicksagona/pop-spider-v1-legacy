@@ -16,6 +16,11 @@ namespace PopSpider;
  * @version    1.0
  */
 
+use Pop\Data\Data,
+    Pop\File\File,
+    Pop\Mvc\Model,
+    Pop\Mvc\View;
+
 class Crawler
 {
 
@@ -43,6 +48,7 @@ class Crawler
     {
         if (!array_key_exists($url, self::$urls)) {
             $spider = new Spider($url, $elements);
+            echo '-> (' . $spider->getCode() . ') ' . $url . PHP_EOL;
             if ($spider->isError()) {
                 self::$errors[] = array(
                     'url'    => $url,
@@ -70,13 +76,27 @@ class Crawler
     /**
      * Static method to output the results
      *
-     * @param  string $format
+     * @param  string $url
+     * @param  string $output
      * @param  string $dir
      * @return void
      */
-    public static function output($format, $dir)
+    public static function output($url, $output, $dir)
     {
-
+        if ($output == 'csv') {
+            echo 'Do some CSV stuff';
+        } else {
+            $view = View::factory(__DIR__ . '/../../view/index.phtml', new Model(array(
+                'title'  => $url,
+                'urls'   => self::$urls,
+                'errors' => self::$errors
+            )));
+            $html = $view->render(true);
+            copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
+            $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
+            $file->write($html)
+                 ->save();
+        }
     }
 
     /**
