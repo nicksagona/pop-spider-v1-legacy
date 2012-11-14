@@ -356,6 +356,7 @@ class Spider
             foreach ($imgs as $img) {
 
                 if ($img->hasAttribute('src')) {
+                    $base = (substr($this->base, -1) != '/') ? $this->base . '/' : $this->base;
                     $s = $img->getAttribute('src');
                     if (substr($s, 0, 1) == '/') {
                         $s = substr($s, 1);
