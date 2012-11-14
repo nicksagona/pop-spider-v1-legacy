@@ -141,7 +141,7 @@ class Spider
             }
 
             // If an HTML page, parse it
-            if ($this->contentType == 'text/html') {
+            if (stripos($this->contentType, 'text/html') !== false) {
                 $oldError = ini_get('error_reporting');
                 error_reporting(0);
 
