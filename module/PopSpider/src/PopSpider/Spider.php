@@ -300,7 +300,8 @@ class Spider
 
                 // If the HREF attribute is relative, parse and format the absolute URL
                 if (($a->hasAttribute('href')) &&
-                    ($a->getAttribute('href') != '#') &&
+                    (substr($a->getAttribute('href'), 0, 1) != '#') &&
+                    (substr($a->getAttribute('href'), 0, 1) != '?') &&
                     ($a->getAttribute('href') != '') &&
                     (substr(strtolower($a->getAttribute('href')), 0, 5) != 'http:') &&
                     (substr(strtolower($a->getAttribute('href')), 0, 6) != 'https:') &&

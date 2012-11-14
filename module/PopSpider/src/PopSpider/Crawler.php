@@ -64,7 +64,7 @@ class Crawler
                 $urls = self::$urls[$url]->getElements('a');
                 if (null !== $urls) {
                     foreach ($urls as $u) {
-                        if ((null !== $u['href']) && ($u['href'] != '') && ($u['href'] != '#') && (stripos($u['href'], $domain) !== false)) {
+                        if ((null !== $u['href']) && ($u['href'] != '') && (substr($u['href'], 0, 1) != '#') && (substr($u['href'], 0, 1) != '?') && (stripos($u['href'], $domain) !== false)) {
                             self::crawl($u['href'], $elements, $url);
                         }
                     }
