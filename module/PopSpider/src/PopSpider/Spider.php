@@ -121,14 +121,12 @@ class Spider
             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0';
 
         $opts = array(
-            'http' => array(
-                'method'     => 'GET',
-                'header'     => "Accept-language: en\r\n" . "User-Agent: " . $ua . "\r\n",
-                'user_agent' => $ua
-            )
+            'method'     => 'GET',
+            'header'     => "Accept-language: en\r\n" . "User-Agent: " . $ua . "\r\n",
+            'user_agent' => $ua
         );
 
-        $response = Response::parse($this->url, stream_context_create($opts));
+        $response = Response::parse($this->url, $opts);
         $this->error = $response->isError();
         $this->code = $response->getCode();
 
