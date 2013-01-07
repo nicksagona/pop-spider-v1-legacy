@@ -23,4 +23,4 @@ REM -h --help                          Display this help
 REM
 
 SET SCRIPT_DIR=%~dp0
-php %SCRIPT_DIR%crawl.php %1 %2 %3 %4 %5 %6
+php %SCRIPT_DIR%crawl.php %*
