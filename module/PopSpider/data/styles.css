@@ -41,7 +41,7 @@ h2 {
     padding: 10px 0 0 0;
     font-size: 2.4em;
     font-weight: normal;
-    border-top: solid 2px #ccc;
+    border-top: solid 1px #ccc;
 }
 
 h3 {
@@ -64,6 +64,10 @@ p {
 
 .right {
     float: right;
+}
+
+.url-header {
+    color: #09a1ed;
 }
 
 .data-table {
