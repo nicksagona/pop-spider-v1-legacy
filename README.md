@@ -1,5 +1,10 @@
-PopSpider
-=========
+PopSpider 1.0.1
+===============
+
+RELEASE INFORMATION
+-------------------
+PopSpider 1.0.1 Release  
+Released February 14, 2013
 
 A simple web spider that parses SEO-pertinent data from a website.
 Simply download this Pop module, hook it up to a local copy of the
@@ -35,6 +40,5 @@ Options:
 
 Basic CLI usage:
 ----------------
-<pre>
-scripts/crawl -u http://www.domain.com/ -d ./myfolder  -e b,u
-</pre>
+
+    scripts/crawl -u http://www.domain.com/ -d ./myfolder  -e b,u

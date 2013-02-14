@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @namespace
  */
@@ -13,13 +12,8 @@ namespace PopSpider;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2012 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    https://github.com/nicksagona/PopSpider/blob/master/LICENSE.TXT     New BSD License
- * @version    1.0
+ * @version    1.0.1
  */
-
-use Pop\Data\Data,
-    Pop\File\File,
-    Pop\Mvc\Model,
-    Pop\Mvc\View;
 
 class Crawler
 {
@@ -83,7 +77,7 @@ class Crawler
     public static function output($url, $dir)
     {
         // Create the HTML file
-        $view = View::factory(__DIR__ . '/../../view/index.phtml', new Model(array(
+        $view = \Pop\Mvc\View::factory(__DIR__ . '/../../view/index.phtml', new \Pop\Mvc\Model(array(
             'title'  => $url,
             'urls'   => self::$urls,
             'errors' => self::$errors
@@ -92,9 +86,7 @@ class Crawler
         copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
         copy(__DIR__ . '/../../data/scripts.js', $dir . DIRECTORY_SEPARATOR . 'scripts.js');
 
-        $file = new File($dir . DIRECTORY_SEPARATOR . 'index.html');
-        $file->write($view->render(true))
-             ->save();
+        file_put_contents($dir . DIRECTORY_SEPARATOR . 'index.html', $view->render(true));
     }
 
     /**

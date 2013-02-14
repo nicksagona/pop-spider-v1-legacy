@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @namespace
  */
@@ -13,10 +12,8 @@ namespace PopSpider;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2012 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    https://github.com/nicksagona/PopSpider/blob/master/LICENSE.TXT     New BSD License
- * @version    1.0
+ * @version    1.0.1
  */
-
-use Pop\Http\Response;
 
 class Spider
 {
@@ -89,7 +86,7 @@ class Spider
      *
      * @param  string $url
      * @param  array  $elements
-     * @return void
+     * @return \PopSpider\Spider
      */
     public function __construct($url, array $elements = null)
     {
@@ -126,7 +123,7 @@ class Spider
             'user_agent' => $ua
         );
 
-        $response = Response::parse($this->url, $opts);
+        $response = \Pop\Http\Response::parse($this->url, $opts);
         $this->error = $response->isError();
         $this->code = $response->getCode();
 
