@@ -1,4 +1,4 @@
-PopSpider 1.0.1
+PopSpider 1.0.2
 ===============
 
 RELEASE INFORMATION
@@ -41,4 +41,4 @@ Options:
 Basic CLI usage:
 ----------------
 
-    scripts/crawl -u http://www.domain.com/ -d ./folder  -e b,u
+    scripts/crawl -u http://www.domain.com/ -d ./folder -e b,u
