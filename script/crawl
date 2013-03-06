@@ -14,7 +14,7 @@
 #
 # Possible usage and arguments
 #
-# ./crawl -u http://www.domain.com/ -d ./myfolder -o csv -e b,u
+# ./crawl -u http://www.domain.com/ -d ./folder -e b,u
 #
 # -u --url http://www.domain.com/    Set the URL in which to crawl
 # -d --dir folder                    Set the folder in which to output the file(s) (default: current)

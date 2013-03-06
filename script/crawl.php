@@ -15,7 +15,7 @@
  *
  * Possible usage and arguments
  *
- * ./crawl -u http://www.domain.com/ -d ./myfolder  -e b,u
+ * ./crawl -u http://www.domain.com/ -d ./folder -e b,u
  *
  * -u --url http://www.domain.com/    Set the URL in which to crawl
  * -d --dir folder                    Set the folder in which to output the file(s)
@@ -92,8 +92,10 @@ try {
 
     echo 'Crawling: ' . $url . PHP_EOL;
     echo '----------' . str_repeat('-', strlen($url)) . PHP_EOL;
+
     Crawler::crawl($url, $elements);
     Crawler::output($url, $folder);
+
     echo PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL . PHP_EOL;

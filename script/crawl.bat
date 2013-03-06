@@ -14,7 +14,7 @@ REM to info@popphp.org so we can send you a copy immediately.
 REM
 REM Possible usage and arguments
 REM
-REM ./crawl -u http://www.domain.com/ -d ./myfolder -o csv -e b,u
+REM ./crawl -u http://www.domain.com/ -d ./folder -e b,u
 REM
 REM -u --url http://www.domain.com/    Set the URL in which to crawl
 REM -d --dir folder                    Set the folder in which to output the file(s) (default: current)
