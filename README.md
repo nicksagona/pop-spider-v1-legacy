@@ -13,9 +13,12 @@ Pop PHP Framework and it'll be ready to crawl any site.
 By default, the spider parses the following elements and their
 SEO-pertinent attributes:
 * title
-* meta  (name & content)
-* a     (href, title, rel, name & value)
-* img   (src, title & alt)
+* meta
+    + name & content
+* a
+    + href, title, rel, name & value
+* img
+    + src, title & alt
 * h1
 * h2
 * h3
