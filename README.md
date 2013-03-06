@@ -3,7 +3,7 @@ PopSpider 1.0.2
 
 RELEASE INFORMATION
 -------------------
-PopSpider 1.0.2 Release
+PopSpider 1.0.2 Release  
 Released March 6, 2013
 
 A simple web spider that parses SEO-pertinent data from a website.
@@ -13,9 +13,9 @@ Pop PHP Framework and it'll be ready to crawl any site.
 By default, the spider parses the following elements and their
 SEO-pertinent attributes:
 * title
-* meta
-* a
-* img
+* meta  (name & content)
+* a     (href, title, rel, name & value)
+* img   (src, title & alt)
 * h1
 * h2
 * h3
