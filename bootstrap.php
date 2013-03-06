@@ -32,3 +32,4 @@ $autoloader->splAutoloadRegister();
  */
 
 $autoloader->register('PopSpider', __DIR__ . '/module/PopSpider/src');
+
