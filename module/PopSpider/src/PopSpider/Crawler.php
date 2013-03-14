@@ -41,7 +41,7 @@ class Crawler
     public static function crawl($url, $elements = null, $parent = null)
     {
         // Encode the URL
-        $url = str_replace(array('%3A', '%2F'), array(':', '/'), rawurlencode($url));
+        $url = str_replace(array('%3A', '%2F', '%23'), array(':', '/', '#'), rawurlencode($url));
 
         if (!array_key_exists($url, self::$urls)) {
             $spider = new Spider($url, $elements);
