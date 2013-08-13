@@ -12,7 +12,7 @@ namespace PopSpider;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2013 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    https://github.com/nicksagona/PopSpider/blob/master/LICENSE.TXT     New BSD License
- * @version    1.0.2
+ * @version    1.0.3
  */
 
 class Crawler
@@ -41,7 +41,11 @@ class Crawler
     public static function crawl($url, $elements = null, $parent = null)
     {
         // Encode the URL
-        $url = str_replace(array('%3A', '%2F', '%23'), array(':', '/', '#'), rawurlencode($url));
+        $url = str_replace(
+            array('%3A', '%2F', '%23', '%3F', '%3D'),
+            array(':', '/', '#', '?', '='),
+            rawurlencode($url)
+        );
 
         if (!array_key_exists($url, self::$urls)) {
             $spider = new Spider($url, $elements);

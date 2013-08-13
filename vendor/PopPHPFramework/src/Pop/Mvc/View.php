@@ -23,7 +23,7 @@ namespace Pop\Mvc;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2013 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.2.3
+ * @version    1.4.0
  */
 class View
 {
@@ -67,9 +67,7 @@ class View
             if (((substr($template, -6) == '.phtml') ||
                  (substr($template, -5) == '.php3') ||
                  (substr($template, -4) == '.php')) && (file_exists($template))) {
-
                 $this->templateFile = $template;
-
             } else {
                 $this->templateString = $template;
             }
@@ -233,35 +231,42 @@ class View
         if (null !== $this->model) {
             $data = $this->model->asArrayObject();
 
+            // Render nested arrays first
             foreach ($data as $key => $value) {
-                if ($value instanceof \ArrayObject) {
+                if (is_array($value) || ($value instanceof \ArrayObject)) {
                     $start = '[{' . $key . '}]';
                     $end = '[{/' . $key . '}]';
+                    if ((strpos($this->templateString, $start) !== false) && (strpos($this->templateString, $end) !== false)) {
+                        $loopCode = substr($this->templateString, strpos($this->templateString, $start));
+                        $loopCode = substr($loopCode, 0, (strpos($loopCode, $end) + strlen($end)));
 
-                    $loopCode = substr($this->templateString, strpos($this->templateString, $start));
-                    $loopCode = substr($loopCode, 0, (strpos($loopCode, $end) + strlen($end)));
-
-                    $loop = str_replace($start, '', $loopCode);
-                    $loop = str_replace($end, '', $loop);
-                    $outputLoop = '';
-                    $i = 0;
-                    foreach ($value as $val) {
-                        if ($val instanceof \ArrayObject) {
-                            $l = $loop;
-                            foreach ($val as $k => $v) {
-                                $l = str_replace('[{' . $k . '}]', $v, $l);
+                        $loop = str_replace($start, '', $loopCode);
+                        $loop = str_replace($end, '', $loop);
+                        $outputLoop = '';
+                        $i = 0;
+                        foreach ($value as $val) {
+                            if (is_array($value) || ($val instanceof \ArrayObject)) {
+                                $l = $loop;
+                                foreach ($val as $k => $v) {
+                                    $l = str_replace('[{' . $k . '}]', $v, $l);
+                                }
+                                $outputLoop .= $l;
+                            } else {
+                                $outputLoop .= str_replace('[{value}]', $val, $loop);
                             }
-                            $outputLoop .= $l;
-                        } else {
-                            $outputLoop .= str_replace('[{value}]', $val, $loop);
+                            $i++;
+                            if ($i < count($value)) {
+                                $outputLoop .= PHP_EOL;
+                            }
                         }
-                        $i++;
-                        if ($i < count($value)) {
-                            $outputLoop .= PHP_EOL;
-                        }
+                        $this->output = str_replace($loopCode, $outputLoop, $this->output);
                     }
-                    $this->output = str_replace($loopCode, $outputLoop, $this->output);
-                } else {
+                }
+            }
+
+            // Render scalar values
+            foreach ($data as $key => $value) {
+                if (!is_array($value) && !($value instanceof \ArrayObject)) {
                     $this->output = str_replace('[{' . $key . '}]', $value, $this->output);
                 }
             }
