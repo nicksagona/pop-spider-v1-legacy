@@ -4,7 +4,7 @@ PopSpider 1.0.3
 RELEASE INFORMATION
 -------------------
 PopSpider 1.0.3 Release  
-Released August 13, 2013
+Released September 9, 2013
 
 A simple web spider that parses SEO-pertinent data from a website.
 Simply download this Pop module, hook it up to a local copy of the
@@ -49,4 +49,5 @@ Basic CLI usage:
 CHANGELOG:
 ----------
 * 1.0.3
+    - Update to Pop 1.5.0
     - Update to Pop 1.4.0, add two more html entities to exclude from the URL parser.
