@@ -7,8 +7,7 @@ PopSpider 1.0.3 Release
 Released September 9, 2013
 
 A simple web spider that parses SEO-pertinent data from a website.
-Simply download this Pop module, hook it up to a local copy of the
-Pop PHP Framework and it'll be ready to crawl any site.
+Simply download this Pop module and go.
 
 By default, the spider parses the following elements and their
 SEO-pertinent attributes:
