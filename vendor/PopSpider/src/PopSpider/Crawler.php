@@ -31,6 +31,12 @@ class Crawler
     protected static $errors = array();
 
     /**
+     * URL depth
+     * @var int
+     */
+    protected static $depth = 0;
+
+    /**
      * Static method to crawl the URLs
      *
      * @param  string $url
@@ -46,6 +52,11 @@ class Crawler
             array(':', '/', '#', '?', '='),
             rawurlencode($url)
         );
+
+        $slashes = substr_count($url, '/') - 2;
+        if ($slashes > self::$depth) {
+            self::$depth = $slashes;
+        }
 
         if (!array_key_exists($url, self::$urls)) {
             $spider = new Spider($url, $elements);
@@ -83,17 +94,25 @@ class Crawler
      */
     public static function output($url, $dir)
     {
-        // Create the HTML file
-        $view = \Pop\Mvc\View::factory(__DIR__ . '/../../view/index.phtml', new \Pop\Mvc\Model(array(
+        // Create model object
+        $data = new \Pop\Mvc\Model(array(
             'title'  => $url,
             'urls'   => self::$urls,
-            'errors' => self::$errors
-        )));
+            'errors' => self::$errors,
+            'depth'  => self::$depth
+        ));
+
+        // Create the HTML file
+        $view = \Pop\Mvc\View::factory(__DIR__ . '/../../view/index.phtml', $data);
 
         copy(__DIR__ . '/../../data/styles.css', $dir . DIRECTORY_SEPARATOR . 'styles.css');
         copy(__DIR__ . '/../../data/scripts.js', $dir . DIRECTORY_SEPARATOR . 'scripts.js');
 
         file_put_contents($dir . DIRECTORY_SEPARATOR . 'index.html', $view->render(true));
+
+        // Create the sitemap file
+        $view = \Pop\Mvc\View::factory(__DIR__ . '/../../view/sitemap.phtml', $data);
+        file_put_contents($dir . DIRECTORY_SEPARATOR . 'sitemap.xml', $view->render(true));
     }
 
     /**

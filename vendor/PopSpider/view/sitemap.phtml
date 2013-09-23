@@ -1,0 +1,19 @@
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL; ?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with PopSpider https://github.com/nicksagona/PopSpider -->
+<?php if (count($urls) > 0): ?>
+<?php foreach ($urls as $key => $value): ?>
+<?php if ($value->getCode() == 200): ?>
+    <url>
+        <loc><?php echo $key; ?></loc>
+        <changefreq>monthly</changefreq>
+        <priority><?php echo number_format(round((($depth - (substr_count($key, '/') - 2) + 1) / $depth), 2), 2); ?></priority>
+    </url>
+<?php endif; ?>
+<?php endforeach; ?>
+<?php endif; ?>
+</urlset>
