@@ -36,6 +36,7 @@ require_once __DIR__ . '/../bootstrap.php';
 use PopSpider\Crawler;
 
 try {
+    $start = time();
     $options = getopt('u:d:e:h', array('url:', 'dir:', 'elements:', 'help'));
     $url = null;
     $folder = __DIR__;
@@ -96,7 +97,12 @@ try {
     Crawler::crawl($url, $elements);
     Crawler::output($url, $folder);
 
-    echo PHP_EOL . 'Done' . PHP_EOL . PHP_EOL;
+    $elapsedTime = null;
+    $time = time() - $start;
+    $secs = $time % 60;
+    $mins = ($time - $secs) / 60;
+
+    echo PHP_EOL . 'Done (' . $mins . ':' . $secs . ')' . PHP_EOL . PHP_EOL;
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL . PHP_EOL;
 }
