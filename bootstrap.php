@@ -31,5 +31,4 @@ $autoloader->splAutoloadRegister();
  *     $autoloader->loadClassMap('../vendor/YourLib/classmap.php');
  */
 
-$autoloader->register('PopSpider', __DIR__ . '/module/PopSpider/src');
-
+$autoloader->register('PopSpider', __DIR__ . '/vendor/PopSpider/src');

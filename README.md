@@ -1,10 +1,10 @@
-PopSpider 1.0.3
+PopSpider 1.1.0
 ===============
 
 RELEASE INFORMATION
 -------------------
-PopSpider 1.0.3 Release  
-Released September 9, 2013
+PopSpider 1.1.0 Release  
+Released September 23, 2013
 
 A simple web spider that parses SEO-pertinent data from a website.
 Simply download this Pop module and go.
@@ -47,6 +47,9 @@ Basic CLI usage:
 
 CHANGELOG:
 ----------
-* 1.0.3
+* 1.1.0
     - Update to Pop 1.5.0
+    - Move PopSpider into vendor folder
+
+* 1.0.3
     - Update to Pop 1.4.0, add two more html entities to exclude from the URL parser.
