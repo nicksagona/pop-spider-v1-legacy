@@ -6,8 +6,9 @@ RELEASE INFORMATION
 PopSpider 1.1.0 Release  
 Released September 23, 2013
 
-A simple web spider that parses SEO-pertinent data from a website.
-Simply download this Pop module and go.
+A simple web spider that parses SEO-pertinent data from a website
+and produces a HTML-based report of what was parsed as well as
+a sitemap.xml file.
 
 By default, the spider parses the following elements and their
 SEO-pertinent attributes:
@@ -43,13 +44,14 @@ Options:
 Basic CLI usage:
 ----------------
 
-    scripts/crawl -u http://www.domain.com/ -d ./folder -e b,u
+    scripts/crawl -u http://www.mydomain.com/ -d ./myfolder -e b,u
 
 CHANGELOG:
 ----------
 * 1.1.0
     - Update to Pop 1.5.0
     - Move PopSpider into vendor folder
+    - Add sitemap
     - Add timer
 
 * 1.0.3
