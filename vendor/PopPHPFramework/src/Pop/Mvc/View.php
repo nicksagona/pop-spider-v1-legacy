@@ -23,7 +23,7 @@ namespace Pop\Mvc;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2013 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    http://www.popphp.org/license     New BSD License
- * @version    1.5.0
+ * @version    1.6.0
  */
 class View
 {
@@ -41,10 +41,10 @@ class View
     protected $templateString = null;
 
     /**
-     * Data model
-     * @var \Pop\Mvc\Model
+     * Model data
+     * @var array
      */
-    protected $model = null;
+    protected $data = null;
 
     /**
      * View output string
@@ -58,10 +58,10 @@ class View
      * Instantiate the view object.
      *
      * @param  string $template
-     * @param  mixed  $model
+     * @param  array  $data
      * @return \Pop\Mvc\View
      */
-    public function __construct($template = null, $model = null)
+    public function __construct($template = null, array $data = null)
     {
         if (null !== $template) {
             if (((substr($template, -6) == '.phtml') ||
@@ -73,35 +73,57 @@ class View
             }
         }
 
-        if (null !== $model) {
-            if (is_array($model)) {
-                $this->model = new Model($model);
-            } else if ($model instanceof Model) {
-                $this->model = $model;
-            }
-        }
+        $this->data = $data;
     }
 
     /**
      * Create a Pop\Mvc\View object
      *
      * @param  string $template
-     * @param  mixed  $model
+     * @param  array  $data
      * @return \Pop\Mvc\View
      */
-    public static function factory($template = null, $model = null)
+    public static function factory($template = null, array $data = null)
     {
-        return new self($template, $model);
+        return new self($template, $data);
     }
 
     /**
-     * Get data model
+     * Get model data
      *
-     * @return \Pop\Mvc\Model
+     * @param  string $key
+     * @return mixed
      */
-    public function getModel()
+    public function get($key)
     {
-        return $this->model;
+        return (isset($this->data[$key])) ? $this->data[$key] : null;
+    }
+
+    /**
+     * Get all model data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get view template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        $tmpl = null;
+        if (null !== $this->templateFile) {
+            $tmpl = $this->templateFile;
+        } else if (null !== $this->templateString) {
+            $tmpl = $this->templateString;
+        }
+
+        return $tmpl;
     }
 
     /**
@@ -125,26 +147,42 @@ class View
     }
 
     /**
+     * Set view template with auto-detect
+     *
+     * @param  string $template
+     * @return \Pop\Mvc\View
+     */
+    public function setTemplate($template)
+    {
+        if (((substr($template, -6) == '.phtml') ||
+                (substr($template, -5) == '.php3') ||
+                (substr($template, -4) == '.php')) && (file_exists($template))) {
+            $this->templateFile = $template;
+            $this->templateString = null;
+        } else {
+            $this->templateString = $template;
+            $this->templateFile = null;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set view template file
      *
      * @param  string $template
      * @throws Exception
      * @return \Pop\Mvc\View
      */
-    public function setTemplateFile($template = null)
+    public function setTemplateFile($template)
     {
-        if (null !== $template) {
-            if (((substr($template, -6) == '.phtml') ||
-                 (substr($template, -5) == '.php3') ||
-                 (substr($template, -4) == '.php')) && (file_exists($template))) {
-
-                $this->templateFile = $template;
-
-            } else {
-                throw new Exception('That template file either does not exist or is not the correct format.');
-            }
-        } else {
+        if (((substr($template, -6) == '.phtml') ||
+             (substr($template, -5) == '.php3') ||
+             (substr($template, -4) == '.php')) && (file_exists($template))) {
             $this->templateFile = $template;
+            $this->templateString = null;
+        } else {
+            throw new Exception('That template file either does not exist or is not the correct format.');
         }
 
         return $this;
@@ -156,21 +194,47 @@ class View
      * @param  string $template
      * @return \Pop\Mvc\View
      */
-    public function setTemplateString($template = null)
+    public function setTemplateString($template)
     {
         $this->templateString = $template;
+        $this->templateFile = null;
         return $this;
     }
 
     /**
-     * Set data model
+     * Set model data
      *
-     * @param  Model $model
+     * @param  string $name
+     * @param  mixed  $value
      * @return \Pop\Mvc\View
      */
-    public function setModel(Model $model)
+    public function set($name, $value)
     {
-        $this->model = $model;
+        $this->data[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * Merge new model data
+     *
+     * @param  array $data
+     * @return \Pop\Mvc\View
+     */
+    public function merge(array $data)
+    {
+        $this->data = array_merge($this->data, $data);
+        return $this;
+    }
+
+    /**
+     * Set all model data
+     *
+     * @param  array $data
+     * @return \Pop\Mvc\View
+     */
+    public function setData(array $data = array())
+    {
+        $this->data = $data;
         return $this;
     }
 
@@ -207,9 +271,8 @@ class View
      */
     protected function renderTemplateFile()
     {
-        if (null !== $this->model) {
-            $data = $this->model->asArrayObject();
-            foreach ($data as $key => $value) {
+        if (null !== $this->data) {
+            foreach ($this->data as $key => $value) {
                 ${$key} = $value;
             }
         }
@@ -228,11 +291,9 @@ class View
     {
         $this->output = $this->templateString;
 
-        if (null !== $this->model) {
-            $data = $this->model->asArrayObject();
-
+        if (null !== $this->data) {
             // Render nested arrays first
-            foreach ($data as $key => $value) {
+            foreach ($this->data as $key => $value) {
                 if (is_array($value) || ($value instanceof \ArrayObject)) {
                     $start = '[{' . $key . '}]';
                     $end = '[{/' . $key . '}]';
@@ -244,15 +305,22 @@ class View
                         $loop = str_replace($end, '', $loop);
                         $outputLoop = '';
                         $i = 0;
-                        foreach ($value as $val) {
-                            if (is_array($value) || ($val instanceof \ArrayObject)) {
+                        foreach ($value as $ky => $val) {
+                            if (is_array($val) || ($val instanceof \ArrayObject)) {
                                 $l = $loop;
                                 foreach ($val as $k => $v) {
-                                    $l = str_replace('[{' . $k . '}]', $v, $l);
+                                    // Check is value is stringable
+                                    if (!is_object($v) || (is_object($v) && method_exists($v, '__toString'))) {
+                                        $l = str_replace('[{' . $k . '}]', $v, $l);
+                                    }
                                 }
                                 $outputLoop .= $l;
                             } else {
-                                $outputLoop .= str_replace('[{value}]', $val, $loop);
+                                // Check is value is stringable
+                                if (!is_object($val) || (is_object($val) && method_exists($val, '__toString'))) {
+                                    $replace = (!is_numeric($ky)) ? '[{' . $ky . '}]' : '[{value}]';
+                                    $outputLoop .= str_replace($replace, $val, $loop);
+                                }
                             }
                             $i++;
                             if ($i < count($value)) {
@@ -265,9 +333,12 @@ class View
             }
 
             // Render scalar values
-            foreach ($data as $key => $value) {
+            foreach ($this->data as $key => $value) {
                 if (!is_array($value) && !($value instanceof \ArrayObject)) {
-                    $this->output = str_replace('[{' . $key . '}]', $value, $this->output);
+                    // Check is value is stringable
+                    if (!is_object($value) || (is_object($value) && method_exists($value, '__toString'))) {
+                        $this->output = str_replace('[{' . $key . '}]', $value, $this->output);
+                    }
                 }
             }
         }
@@ -281,6 +352,51 @@ class View
     public function __toString()
     {
         return $this->render(true);
+    }
+
+    /**
+     * Get method to return the value of data[$name].
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * Set method to set the property to the value of data[$name].
+     *
+     * @param  string $name
+     * @param  mixed $value
+     * @return mixed
+     */
+    public function __set($name, $value)
+    {
+        return $this->set($name, $value);
+    }
+
+    /**
+     * Return the isset value of data[$name].
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function __isset($name)
+    {
+        return isset($this->data[$name]);
+    }
+
+    /**
+     * Unset data[$name].
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function __unset($name)
+    {
+        unset($this->data[$name]);
     }
 
 }

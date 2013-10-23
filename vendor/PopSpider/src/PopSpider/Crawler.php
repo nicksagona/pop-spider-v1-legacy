@@ -12,7 +12,7 @@ namespace PopSpider;
  * @author     Nick Sagona, III <nick@popphp.org>
  * @copyright  Copyright (c) 2009-2013 Moc 10 Media, LLC. (http://www.moc10media.com)
  * @license    https://github.com/nicksagona/PopSpider/blob/master/LICENSE.TXT     New BSD License
- * @version    1.0.3
+ * @version    1.1.1
  */
 
 class Crawler
@@ -95,12 +95,12 @@ class Crawler
     public static function output($url, $dir)
     {
         // Create model object
-        $data = new \Pop\Mvc\Model(array(
+        $data = array(
             'title'  => $url,
             'urls'   => self::$urls,
             'errors' => self::$errors,
             'depth'  => self::$depth
-        ));
+        );
 
         // Create the HTML file
         $view = \Pop\Mvc\View::factory(__DIR__ . '/../../view/index.phtml', $data);
