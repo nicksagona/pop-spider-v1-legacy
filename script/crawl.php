@@ -36,10 +36,11 @@ require_once __DIR__ . '/../bootstrap.php';
 use PopSpider\Crawler;
 
 try {
-    $start = time();
-    $options = getopt('u:d:e:h', array('url:', 'dir:', 'elements:', 'help'));
-    $url = null;
-    $folder = __DIR__;
+    $start    = time();
+    $time     = null;
+    $options  = getopt('u:d:e:t:h', array('url:', 'dir:', 'elements:', 'time:', 'help'));
+    $url      = null;
+    $folder   = __DIR__;
     $elements = null;
 
     // Write header
@@ -54,6 +55,7 @@ try {
         echo ' -u --url http://www.domain.com/    Set the URL in which to crawl' . PHP_EOL;
         echo ' -d --dir folder                    Set the folder in which to output the file(s) (default: current)' . PHP_EOL;
         echo ' -e --elements b,u                  Set any additional elements to parse, comma-separated list' . PHP_EOL;
+        echo ' -t --time 120                      Set a timeout to stop the crawl after a certain amount of seconds' . PHP_EOL;
         echo ' -h --help                          Display this help' . PHP_EOL . PHP_EOL;
         exit(0);
     }
@@ -84,17 +86,21 @@ try {
         $folder = realpath($dir);
     }
 
-
     // Get the additional elements
     if (isset($options['e']) || isset($options['elements'])) {
         $elements = (isset($options['e'])) ? $options['e'] : $options['elements'];
         $elements = explode(',', $elements);
     }
 
+    // Get the timeout setting
+    if (isset($options['t']) || isset($options['time'])) {
+        $time = (isset($options['t'])) ? $options['t'] : $options['time'];
+    }
+
     echo 'Crawling: ' . $url . PHP_EOL;
     echo '----------' . str_repeat('-', strlen($url)) . PHP_EOL;
 
-    Crawler::crawl($url, $elements);
+    Crawler::crawl($url, $elements, null, $start, $time);
     Crawler::output($url, $folder);
 
     $elapsedTime = null;

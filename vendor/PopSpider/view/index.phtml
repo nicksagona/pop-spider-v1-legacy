@@ -21,6 +21,7 @@
     <h2 class="url-header"><?php echo $title; ?></h2>
     <h4><?php echo date('m/d/Y H:i:s'); ?></h4>
 <?php
+$redirects = array();
 echo '    <a name="urls"></a>' . PHP_EOL;
 echo '    <a class="right" style="margin: 22px 0 0 0;" href="#errors">(Go to Errors)</a>' . PHP_EOL;
 echo '    <h2>' . count($urls) . ' URLs</h2>'. PHP_EOL;
@@ -29,120 +30,143 @@ if (count($urls) > 0) {
     echo '    <table class="data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
     echo '        <tr><th style="width: 10%;">Code</th><th>Title / URL <span style="float: right; margin: 2px 0 0 0; font-weight: normal; font-size: 0.7em;">(Click title to expand)</span></th></tr>' . PHP_EOL;
     foreach ($urls as $key => $value) {
-        $tle = $value->getElements('title');
-        $urlTitle = ($tle != '') ? trim($tle) : '[' . $value->getContentType() . ']';
-        echo '        <tr>' . PHP_EOL;
-        echo '            <td style="color: #fff; font-weight: bold; font-size: 1.6em; background-color: #699e34; text-align: center;">' . $value->getCode() . '</td>' . PHP_EOL;
-        echo '            <td>' . PHP_EOL;
-        echo '                <a class="right" style="margin: 7px 0 0 0;" href="' . $key . '" target="_blank">' . $key . '</a>' . PHP_EOL;
-        echo '                <h3><a href="#" onclick="displayResults(\'results-' . $j . '\'); return false;">' . $urlTitle .'</a></h3>' . PHP_EOL;
-        echo '                <div id="results-' . $j . '" style="display: none;">' . PHP_EOL;
+        if (floor($value->getCode() / 100) == 3) {
+            $redirects[$key] = $value;
+        } else {
+            $tle = $value->getElements('title');
+            $urlTitle = ($tle != '') ? trim($tle) : '[' . $value->getContentType() . ']';
+            echo '        <tr>' . PHP_EOL;
+            echo '            <td style="color: #fff; font-weight: bold; font-size: 1.6em; background-color: #699e34; text-align: center;">' . $value->getCode() . '</td>' . PHP_EOL;
+            echo '            <td>' . PHP_EOL;
+            echo '                <a class="right" style="margin: 7px 0 0 0;" href="' . $key . '" target="_blank">' . $key . '</a>' . PHP_EOL;
+            echo '                <h3><a href="#" onclick="displayResults(\'results-' . $j . '\'); return false;">' . $urlTitle .'</a></h3>' . PHP_EOL;
+            echo '                <div id="results-' . $j . '" style="display: none;">' . PHP_EOL;
 
-        // META Tags
-        $metas = $value->getElements('meta');
-        if (count($metas) > 0) {
-            echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-            echo '                    <tr><th colspan="2">&lt;meta&gt; <span class="right">(' . count($metas) . ')</span></th></tr>' . PHP_EOL;
-            echo '                    <tr><td style="background-color: #999;"><strong>name</strong></td><td style="background-color: #999;"><strong>content</strong></td></tr>' . PHP_EOL;
-            foreach ($metas as $val) {
-                echo '                    <tr><td>' . $val['name'] . '</td><td>' . $val['content'] . '</td></tr>' . PHP_EOL;
-            }
-            echo '                </table>' . PHP_EOL;
-        }
-
-        // A Tags
-        $a = $value->getElements('a');
-        if (count($a) > 0) {
-            echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-            echo '                    <tr><th colspan="5">&lt;a&gt; <span class="right">(' . count($a) . ')</span></th></tr>' . PHP_EOL;
-            echo '                    <tr><td style="background-color: #999;"><strong>href</strong></td><td style="background-color: #999;"><strong>value</strong></td><td style="background-color: #999;"><strong>title</strong></td><td style="background-color: #999;"><strong>rel</strong></td><td style="background-color: #999;"><strong>name</strong></td></tr>' . PHP_EOL;
-            foreach ($a as $val) {
-                echo '                    <tr><td><a href="' . $val['href'] . '" target="_blank">' . $val['href'] . '</a></td><td>' . $val['value'] . '</td><td>' . $val['title'] . '</td><td>' . $val['rel'] . '</td><td>' . $val['name'] . '</td></tr>' . PHP_EOL;
-            }
-            echo '                </table>' . PHP_EOL;
-        }
-
-        // IMG Tags
-        $imgs = $value->getElements('img');
-        if (count($imgs) > 0) {
-            echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-            echo '                    <tr><th colspan="3">&lt;img&gt; <span class="right">(' . count($imgs) . ')</span></th></tr>' . PHP_EOL;
-            echo '                    <tr><td style="background-color: #999;"><strong>src</strong></td><td style="background-color: #999;"><strong>alt</strong></td><td style="background-color: #999;"><strong>title</strong></td></tr>' . PHP_EOL;
-            foreach ($imgs as $val) {
-                echo '                    <tr><td><a href="' . $val['src'] . '" target="_blank">' . $val['src'] . '</a></td><td>' . $val['alt'] . '</td><td>' . $val['title'] . '</td></tr>' . PHP_EOL;
-            }
-            echo '                </table>' . PHP_EOL;
-        }
-
-        // H# Tags
-        for ($i = 1; $i < 7; $i++) {
-            $tag = 'h' . $i;
-            $h = $value->getElements($tag);
-            if (count($h) > 0) {
+            // META Tags
+            $metas = $value->getElements('meta');
+            if (count($metas) > 0) {
                 echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-                echo '                    <tr><th>&lt;' . $tag . '&gt; <span class="right">(' . count($h) . ')</span></th></tr>' . PHP_EOL;
-                foreach ($h as $val) {
+                echo '                    <tr><th colspan="2">&lt;meta&gt; <span class="right">(' . count($metas) . ')</span></th></tr>' . PHP_EOL;
+                echo '                    <tr><td style="background-color: #999;"><strong>name</strong></td><td style="background-color: #999;"><strong>content</strong></td></tr>' . PHP_EOL;
+                foreach ($metas as $val) {
+                    echo '                    <tr><td>' . $val['name'] . '</td><td>' . $val['content'] . '</td></tr>' . PHP_EOL;
+                }
+                echo '                </table>' . PHP_EOL;
+            }
+
+            // A Tags
+            $a = $value->getElements('a');
+            if (count($a) > 0) {
+                echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+                echo '                    <tr><th colspan="5">&lt;a&gt; <span class="right">(' . count($a) . ')</span></th></tr>' . PHP_EOL;
+                echo '                    <tr><td style="background-color: #999;"><strong>href</strong></td><td style="background-color: #999;"><strong>value</strong></td><td style="background-color: #999;"><strong>title</strong></td><td style="background-color: #999;"><strong>rel</strong></td><td style="background-color: #999;"><strong>name</strong></td></tr>' . PHP_EOL;
+                foreach ($a as $val) {
+                    echo '                    <tr><td><a href="' . $val['href'] . '" target="_blank">' . $val['href'] . '</a></td><td>' . $val['value'] . '</td><td>' . $val['title'] . '</td><td>' . $val['rel'] . '</td><td>' . $val['name'] . '</td></tr>' . PHP_EOL;
+                }
+                echo '                </table>' . PHP_EOL;
+            }
+
+            // IMG Tags
+            $imgs = $value->getElements('img');
+            if (count($imgs) > 0) {
+                echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+                echo '                    <tr><th colspan="3">&lt;img&gt; <span class="right">(' . count($imgs) . ')</span></th></tr>' . PHP_EOL;
+                echo '                    <tr><td style="background-color: #999;"><strong>src</strong></td><td style="background-color: #999;"><strong>alt</strong></td><td style="background-color: #999;"><strong>title</strong></td></tr>' . PHP_EOL;
+                foreach ($imgs as $val) {
+                    echo '                    <tr><td><a href="' . $val['src'] . '" target="_blank">' . $val['src'] . '</a></td><td>' . $val['alt'] . '</td><td>' . $val['title'] . '</td></tr>' . PHP_EOL;
+                }
+                echo '                </table>' . PHP_EOL;
+            }
+
+            // H# Tags
+            for ($i = 1; $i < 7; $i++) {
+                $tag = 'h' . $i;
+                $h = $value->getElements($tag);
+                if (count($h) > 0) {
+                    echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+                    echo '                    <tr><th>&lt;' . $tag . '&gt; <span class="right">(' . count($h) . ')</span></th></tr>' . PHP_EOL;
+                    foreach ($h as $val) {
+                        echo '                    <tr><td>' . $val . '</td></tr>' . PHP_EOL;
+                    }
+                    echo '                </table>' . PHP_EOL;
+                }
+            }
+
+            // STRONG Tags
+            $strong = $value->getElements('strong');
+            if (count($strong) > 0) {
+                echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+                echo '                    <tr><th colspan="3">&lt;strong&gt; <span class="right">(' . count($strong) . ')</span></th></tr>' . PHP_EOL;
+                foreach ($strong as $val) {
                     echo '                    <tr><td>' . $val . '</td></tr>' . PHP_EOL;
                 }
                 echo '                </table>' . PHP_EOL;
             }
-        }
 
-        // STRONG Tags
-        $strong = $value->getElements('strong');
-        if (count($strong) > 0) {
-            echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-            echo '                    <tr><th colspan="3">&lt;strong&gt; <span class="right">(' . count($strong) . ')</span></th></tr>' . PHP_EOL;
-            foreach ($strong as $val) {
-                echo '                    <tr><td>' . $val . '</td></tr>' . PHP_EOL;
-            }
-            echo '                </table>' . PHP_EOL;
-        }
-
-        // EM Tags
-        $em = $value->getElements('em');
-        if (count($em) > 0) {
-            echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-            echo '                    <tr><th colspan="3">&lt;em&gt; <span class="right">(' . count($em) . ')</span></th></tr>' . PHP_EOL;
-            foreach ($em as $val) {
-                echo '                    <tr><td>' . $val . '</td></tr>' . PHP_EOL;
-            }
-            echo '                </table>' . PHP_EOL;
-        }
-
-        // Get any additional elements
-        $elements = $value->getElements();
-        unset($elements['title']);
-        unset($elements['meta']);
-        unset($elements['a']);
-        unset($elements['img']);
-        unset($elements['h1']);
-        unset($elements['h2']);
-        unset($elements['h3']);
-        unset($elements['h4']);
-        unset($elements['h5']);
-        unset($elements['h6']);
-        unset($elements['strong']);
-        unset($elements['em']);
-
-        if (count($elements) > 0) {
-            foreach ($elements as $k => $val) {
+            // EM Tags
+            $em = $value->getElements('em');
+            if (count($em) > 0) {
                 echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
-                echo '                    <tr><th colspan="3">&lt;' . $k . '&gt; <span class="right">(' . count($val) . ')</span></th></tr>' . PHP_EOL;
-                foreach ($val as $v) {
-                    echo '                    <tr><td>' . $v . '</td></tr>' . PHP_EOL;
+                echo '                    <tr><th colspan="3">&lt;em&gt; <span class="right">(' . count($em) . ')</span></th></tr>' . PHP_EOL;
+                foreach ($em as $val) {
+                    echo '                    <tr><td>' . $val . '</td></tr>' . PHP_EOL;
                 }
                 echo '                </table>' . PHP_EOL;
             }
+
+            // Get any additional elements
+            $elements = $value->getElements();
+            unset($elements['title']);
+            unset($elements['meta']);
+            unset($elements['a']);
+            unset($elements['img']);
+            unset($elements['h1']);
+            unset($elements['h2']);
+            unset($elements['h3']);
+            unset($elements['h4']);
+            unset($elements['h5']);
+            unset($elements['h6']);
+            unset($elements['strong']);
+            unset($elements['em']);
+
+            if (count($elements) > 0) {
+                foreach ($elements as $k => $val) {
+                    echo '                <table class="sub-data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+                    echo '                    <tr><th colspan="3">&lt;' . $k . '&gt; <span class="right">(' . count($val) . ')</span></th></tr>' . PHP_EOL;
+                    foreach ($val as $v) {
+                        echo '                    <tr><td>' . $v . '</td></tr>' . PHP_EOL;
+                    }
+                    echo '                </table>' . PHP_EOL;
+                }
+            }
+            echo '                </div>' . PHP_EOL;
+            echo '            </td>' . PHP_EOL;
+            echo '        </tr>' . PHP_EOL;
+            $j++;
         }
-        echo '                </div>' . PHP_EOL;
-        echo '            </td>' . PHP_EOL;
-        echo '        </tr>' . PHP_EOL;
-        $j++;
     }
     echo '    </table>' . PHP_EOL;
 } else {
     echo '    <p>There were no URLs to crawl.</p>' . PHP_EOL;
+}
+
+echo '    <h2>' . count($redirects) . ' Redirects (out of ' . count($urls) . ' URLs)</h2>'. PHP_EOL;
+if (count($redirects) > 0) {
+    $j = 1;
+    echo '    <table class="data-table" cellpadding="0" cellspacing="0" border="0">' . PHP_EOL;
+    echo '        <tr><th style="width: 10%;">Code</th><th>Title / URL <span style="float: right; margin: 2px 0 0 0; font-weight: normal; font-size: 0.7em;">(Click title to expand)</span></th></tr>' . PHP_EOL;
+    foreach ($redirects as $key => $value) {
+        $tle = $value->getElements('title');
+        $urlTitle = ($tle != '') ? trim($tle) : '[' . $value->getContentType() . ']';
+        echo '        <tr>' . PHP_EOL;
+        echo '            <td style="color: #fff; font-weight: bold; font-size: 1.6em; background-color: #44beea; text-align: center;">' . $value->getCode() . '</td>' . PHP_EOL;
+        echo '            <td>' . PHP_EOL;
+        echo '                <a class="right" style="margin: 7px 0 0 0;" href="' . $key . '" target="_blank">' . $key . '</a>' . PHP_EOL;
+        echo '                <h3>' . $urlTitle .'</h3>' . PHP_EOL;
+        echo '            </td>' . PHP_EOL;
+        echo '        </tr>' . PHP_EOL;
+    }
+    echo '    </table>' . PHP_EOL;
 }
 
 echo '    <a name="errors"></a>' . PHP_EOL;

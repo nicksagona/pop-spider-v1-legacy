@@ -19,6 +19,7 @@ REM
 REM -u --url http://www.domain.com/    Set the URL in which to crawl
 REM -d --dir folder                    Set the folder in which to output the file(s) (default: current)
 REM -e --elements b,u                  Set any additional elements to parse, comma-separated list
+REM -t --time 120                      Set a timeout to stop the crawl after a certain amount of seconds
 REM -h --help                          Display this help
 REM
 

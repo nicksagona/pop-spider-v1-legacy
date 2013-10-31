@@ -37,6 +37,12 @@ class Spider
     protected $base = null;
 
     /**
+     * Response redirect
+     * @var boolean
+     */
+    protected $redirect = false;
+
+    /**
      * Response error
      * @var boolean
      */
@@ -53,6 +59,12 @@ class Spider
      * @var string
      */
     protected $contentType = null;
+
+    /**
+     * Document content length
+     * @var string
+     */
+    protected $contentLength = null;
 
     /**
      * DOMDocument object
@@ -124,8 +136,10 @@ class Spider
         );
 
         $response = \Pop\Http\Response::parse($this->url, $opts);
+        $this->redirect = $response->isRedirect();
         $this->error = $response->isError();
         $this->code = $response->getCode();
+        $this->contentLength = strlen($response->getBody());
 
         if (!$this->error) {
             // Get content type
@@ -193,7 +207,27 @@ class Spider
     }
 
     /**
-     * Get the response error
+     * Get the content length
+     *
+     * @return int
+     */
+    public function getContentLength()
+    {
+        return $this->contentLength;
+    }
+
+    /**
+     * Get if the response is a redirect
+     *
+     * @return boolean
+     */
+    public function isRedirect()
+    {
+        return $this->redirect;
+    }
+
+    /**
+     * Get if the response is an error
      *
      * @return boolean
      */
@@ -327,7 +361,8 @@ class Spider
                         $h = str_replace('../', '', $h);
                         $href = $base . $h;
                     } else {
-                        $href = $base . $h;
+                        // This might be the cause of a bad redirect
+                        //$href = $base . $h;
                     }
                 // Else, use the full HREF attribute URL
                 } else if (($a->hasAttribute('href')) && (substr(strtolower($a->getAttribute('href')), 0, 4) == 'http')) {

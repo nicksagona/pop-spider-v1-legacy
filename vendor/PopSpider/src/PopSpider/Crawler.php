@@ -42,9 +42,11 @@ class Crawler
      * @param  string $url
      * @param  array  $elements
      * @param  string $parent
+     * @param  string $start
+     * @param  string $time
      * @return void
      */
-    public static function crawl($url, $elements = null, $parent = null)
+    public static function crawl($url, $elements = null, $parent = null, $start = null, $time = null)
     {
         // Encode the URL
         $url = str_replace(
@@ -76,8 +78,12 @@ class Crawler
                 $urls = self::$urls[$url]->getElements('a');
                 if (null !== $urls) {
                     foreach ($urls as $u) {
-                        if ((null !== $u['href']) && ($u['href'] != '') && (substr($u['href'], 0, 1) != '#') && (substr($u['href'], 0, 1) != '?') && (stripos($u['href'], $domain) !== false)) {
-                            self::crawl($u['href'], $elements, $url);
+                        $expired = false;
+                        if ((null !== $start) && (null !== $time)) {
+                            $expired = ((time() - $start) > $time);
+                        }
+                        if ((!$expired) && (null !== $u['href']) && ($u['href'] != '') && (substr($u['href'], 0, 1) != '#') && (substr($u['href'], 0, 1) != '?') && (stripos($u['href'], $domain) !== false)) {
+                            self::crawl($u['href'], $elements, $url, $start, $time);
                         }
                     }
                 }
@@ -96,10 +102,10 @@ class Crawler
     {
         // Create model object
         $data = array(
-            'title'  => $url,
-            'urls'   => self::$urls,
-            'errors' => self::$errors,
-            'depth'  => self::$depth
+            'title'     => $url,
+            'urls'      => self::$urls,
+            'errors'    => self::$errors,
+            'depth'     => self::$depth
         );
 
         // Create the HTML file
