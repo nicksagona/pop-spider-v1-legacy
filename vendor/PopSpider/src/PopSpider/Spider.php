@@ -136,6 +136,7 @@ class Spider
         );
 
         $response = \Pop\Http\Response::parse($this->url, $opts);
+
         $this->redirect = $response->isRedirect();
         $this->error = $response->isError();
         $this->code = $response->getCode();
@@ -155,6 +156,7 @@ class Spider
                 error_reporting(0);
 
                 $this->dom = new \DOMDocument();
+                $this->dom->recover = true;
                 $this->dom->strictErrorChecking = false;
                 $this->dom->loadHTML($response->getBody());
 
@@ -249,7 +251,7 @@ class Spider
     /**
      * Get the dom object
      *
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function getDom()
     {
@@ -362,7 +364,7 @@ class Spider
                         $href = $base . $h;
                     } else {
                         // This might be the cause of a bad redirect
-                        //$href = $base . $h;
+                        $href = $base . $h;
                     }
                 // Else, use the full HREF attribute URL
                 } else if (($a->hasAttribute('href')) && (substr(strtolower($a->getAttribute('href')), 0, 4) == 'http')) {
