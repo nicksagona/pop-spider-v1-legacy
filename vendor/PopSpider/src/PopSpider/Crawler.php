@@ -50,8 +50,8 @@ class Crawler
     {
         // Encode the URL
         $url = str_replace(
-            array('%3A', '%2F', '%23', '%3F', '%3D'),
-            array(':', '/', '#', '?', '='),
+            array('%3A', '%2F', '%23', '%3F', '%3D', '%25', '%2B'),
+            array(':', '/', '#', '?', '=', '%', '+'),
             rawurlencode($url)
         );
 
