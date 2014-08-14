@@ -60,7 +60,7 @@ class Crawler
             self::$depth = $slashes;
         }
 
-        if (!array_key_exists($url, self::$urls)) {
+        if (!array_key_exists($url, self::$urls) && !array_key_exists(strtolower($url), self::$urls)) {
             $spider = new Spider($url, $elements);
             echo '-> (' . $spider->getCode() . ') ' . $url . PHP_EOL;
             if ($spider->isError()) {
