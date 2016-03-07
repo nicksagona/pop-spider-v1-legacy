@@ -1,3 +1,10 @@
+IMPORTANT!
+==========
+This version is now end-of-life, and represents only legacy code for reference.
+You are strongly encouraged to upgrade to version 2 of PopSpider. You can find it here:
+
+[Github](https://github.com/nicksagona/pop-spider)
+
 PopSpider 1.1.1
 ===============
 
